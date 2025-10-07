@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CHECKLIST_ROWS, ChecklistRow, Option, OPTION_COLORS } from "./types";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzX4_BjcotglUMq6SX-nu5rMgNqRDZrEXnuJcqeHVigewV8iqHlTlgOMzIEhAI__-rGCg/exec";
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 export default function PreShiftInspectionForm() {
   const [operatorName, setOperatorName] = useState("");
@@ -172,11 +171,16 @@ export default function PreShiftInspectionForm() {
         payload[r.label] = r.value;
       });
 
+      photos.forEach((p, idx) => {
+        payload[`Upload Issue Photos ${idx + 1}`] = p.url;
+      })
+
       console.log(payload);
 
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzX4_BjcotglUMq6SX-nu5rMgNqRDZrEXnuJcqeHVigewV8iqHlTlgOMzIEhAI__-rGCg/exec", {
+      const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({"task": "init", "data": payload}),
       });
       if (!res.ok) {

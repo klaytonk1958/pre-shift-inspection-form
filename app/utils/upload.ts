@@ -27,6 +27,7 @@ export async function uploadImage(picture: File): Promise<string> {
         body: stream, // ✅ proper stream with .pipe()
       },
       fields: 'id, webViewLink',
+            supportsAllDrives: true,
     });
 
     if (!data.webViewLink) throw new Error('Failed to get file link');
@@ -35,6 +36,7 @@ export async function uploadImage(picture: File): Promise<string> {
     await drive.permissions.create({
       fileId: data.id!,
       requestBody: { role: 'reader', type: 'anyone' },
+            supportsAllDrives: true,
     });
 
     return data.webViewLink;
