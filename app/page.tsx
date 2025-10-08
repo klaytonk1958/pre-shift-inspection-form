@@ -39,25 +39,25 @@ export default function PreShiftInspectionForm() {
 
   async function uploadSingleImage(file: File, index: number) {
     try {
-      setPhotos(prev => prev.map((p, i) => 
+      setPhotos(prev => prev.map((p, i) =>
         i === index ? { ...p, uploading: true } : p
       ));
-      
+
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData
       });
-      
+
       if (!response.ok) {
         throw new Error('Upload failed');
       }
-      
+
       const data = await response.json();
-      
-      setPhotos(prev => prev.map((p, i) => 
+
+      setPhotos(prev => prev.map((p, i) =>
         i === index ? { ...p, url: data.url, uploading: false } : p
       ));
       setUploadError(null);
@@ -106,16 +106,16 @@ export default function PreShiftInspectionForm() {
   async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const chosen = Array.from(e.target.files).slice(0, 5 - photos.length); // max 5
-    
+
     const newPhotos = chosen.map(file => ({
       file,
       url: '',
       uploading: false
     }));
-    
+
     setPhotos(prev => [...prev, ...newPhotos]);
     e.currentTarget.value = ''; // reset input
-    
+
     // Upload each new photo
     newPhotos.forEach((photo, index) => {
       const totalIndex = photos.length + index;
@@ -169,7 +169,16 @@ export default function PreShiftInspectionForm() {
         "Machine Status:": machineStatus,
         "ISSUES DETAILED:": machineStatus === "Down" ? issuesDetailed : "",
         "Priority Level:": priority,
-        "Timestamp": new Date().toISOString(),
+        "Timestamp": new Date().toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          month: "numeric",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false
+        }).replace(",", ""),
       };
 
       rows.forEach((r) => {
@@ -180,13 +189,11 @@ export default function PreShiftInspectionForm() {
         payload[`Upload Issue Photos ${idx + 1}`] = p.url;
       })
 
-      console.log(payload);
-
       const res = await fetch(API_URL, {
         method: "POST",
         redirect: "follow",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({"task": "init", "data": payload}),
+        body: JSON.stringify({ "task": "init", "data": payload }),
       });
       console.log(res)
       if (!res.ok) {
@@ -312,22 +319,20 @@ export default function PreShiftInspectionForm() {
                 <button
                   type="button"
                   onClick={() => setSiteType("Standard Site")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm border ${
-                    siteType === "Standard Site"
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm border ${siteType === "Standard Site"
                       ? "bg-slate-800 text-white"
                       : "bg-white text-gray-700 border-gray-200"
-                  }`}
+                    }`}
                 >
                   Standard Site
                 </button>
                 <button
                   type="button"
                   onClick={() => setSiteType("MSHA Site")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm border ${
-                    siteType === "MSHA Site"
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm border ${siteType === "MSHA Site"
                       ? "bg-slate-800 text-white"
                       : "bg-white text-gray-700 border-gray-200"
-                  }`}
+                    }`}
                 >
                   MSHA Site
                 </button>
@@ -357,11 +362,10 @@ export default function PreShiftInspectionForm() {
                             key={opt}
                             type="button"
                             onClick={() => setRowValue(r.id, opt)}
-                            className={`text-xs px-3 py-1 rounded-full border  ${
-                              r.value === opt
+                            className={`text-xs px-3 py-1 rounded-full border  ${r.value === opt
                                 ? OPTION_COLORS[opt]
                                 : "bg-white text-gray-700 border-gray-200"
-                            }`}
+                              }`}
                           >
                             {opt}
                           </button>
@@ -385,22 +389,20 @@ export default function PreShiftInspectionForm() {
                 <button
                   type="button"
                   onClick={() => setMachineStatus("Running")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm ${
-                    machineStatus === "Running"
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm ${machineStatus === "Running"
                       ? "bg-slate-800 text-white"
                       : "bg-white text-gray-700 border border-gray-200"
-                  }`}
+                    }`}
                 >
                   Running
                 </button>
                 <button
                   type="button"
                   onClick={() => setMachineStatus("Down")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm ${
-                    machineStatus === "Down"
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm ${machineStatus === "Down"
                       ? "bg-red-600 text-white"
                       : "bg-white text-gray-700 border border-gray-200"
-                  }`}
+                    }`}
                 >
                   Down
                 </button>
@@ -416,16 +418,16 @@ export default function PreShiftInspectionForm() {
             {/* Issues Detailed & Priority */}
             <section className="space-y-2">
               {machineStatus === "Down" && (<>
-              <label className="text-sm font-medium">
-                ISSUES DETAILED:
-              </label>
-              <textarea
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                rows={4}
-                value={issuesDetailed}
-                onChange={(e) => setIssuesDetailed(e.target.value)}
-                placeholder="Describe any issues / damages / codes. Ex. Broken Mirror - Describe if its the glass, the plastic back piece, etc."
-              /></>
+                <label className="text-sm font-medium">
+                  ISSUES DETAILED:
+                </label>
+                <textarea
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  rows={4}
+                  value={issuesDetailed}
+                  onChange={(e) => setIssuesDetailed(e.target.value)}
+                  placeholder="Describe any issues / damages / codes. Ex. Broken Mirror - Describe if its the glass, the plastic back piece, etc."
+                /></>
               )}
               <label className="text-sm font-medium">
                 Priority Level: <span className="text-red-500">*</span>
@@ -438,11 +440,10 @@ export default function PreShiftInspectionForm() {
                     key={p}
                     type="button"
                     onClick={() => setPriority(p)}
-                    className={`flex-1 rounded-lg px-3 py-2 text-sm ${
-                      priority === p
+                    className={`flex-1 rounded-lg px-3 py-2 text-sm ${priority === p
                         ? OPTION_COLORS[p]
                         : "bg-white text-gray-700 border border-gray-200"
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
