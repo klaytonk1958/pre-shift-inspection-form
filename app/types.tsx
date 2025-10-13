@@ -97,6 +97,11 @@ export const CHECKLIST_ROWS: ChecklistRow[] = [
   { id: "housekeeping", label: "Housekeeping:", value: "" },
   { id: "ladders", label: "Ladders, Steps, and Platforms:", value: "" },
   { id: "heater", label: "Heater, Defroster, AC:", value: "" },
+
+  // ADD Air Filter and Fuel Filter
+  { id: "air_filter", label: "Air Filter:", value: "" , note: "Check date"},
+  { id: "fuel_filter", label: "Fuel Filter:", value: "" , note: "Check date"},
+
 ];
 
 
