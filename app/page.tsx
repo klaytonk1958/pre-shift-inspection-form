@@ -417,9 +417,9 @@ export default function PreShiftInspectionForm() {
 
             {/* Issues Detailed & Priority */}
             <section className="space-y-2">
-              {machineStatus === "Down" && (<>
+              <>
                 <label className="text-sm font-medium">
-                  ISSUES DETAILED:
+                  COMMENTS:
                 </label>
                 <textarea
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
@@ -428,7 +428,7 @@ export default function PreShiftInspectionForm() {
                   onChange={(e) => setIssuesDetailed(e.target.value)}
                   placeholder="Describe any issues / damages / codes. Ex. Broken Mirror - Describe if its the glass, the plastic back piece, etc."
                 /></>
-              )}
+              
               <label className="text-sm font-medium">
                 Priority Level: <span className="text-red-500">*</span>
               </label>
