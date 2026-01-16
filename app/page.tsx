@@ -419,7 +419,7 @@ export default function PreShiftInspectionForm() {
             <section className="space-y-2">
               <>
                 <label className="text-sm font-medium">
-                  COMMENTS:
+                  COMMENTS.:
                 </label>
                 <textarea
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
