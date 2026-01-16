@@ -167,7 +167,7 @@ export default function PreShiftInspectionForm() {
         "Location:": location,
         "Site Type:": siteType,
         "Machine Status:": machineStatus,
-        "ISSUES DETAILED:": machineStatus === "Down" ? issuesDetailed : "",
+        "ISSUES DETAILED:": issuesDetailed,
         "Priority Level:": priority,
         "Timestamp": new Date().toLocaleString("en-US", {
           timeZone: "America/New_York",
